@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: env.VITE_API_URL || 'http://localhost:3000', // ← fallback just in case
+          target: env.VITE_API_URL || 'http://localhost:8000', // ← fallback just in case
           changeOrigin: true,
           configure: (proxy, _options) => {
             proxy.on('proxyReq', (proxyReq, req, _res) => {
