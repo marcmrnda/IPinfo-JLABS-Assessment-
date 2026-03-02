@@ -134,16 +134,15 @@ function RouteComponent() {
 
   useEffect(() => {
     const fetchUserIPGeolocation = async () => {
+
       try {
+        const userIP = user[0].userIP?.split(',')[0].trim()  
+
         const { data } = await axios.get(
-          `${import.meta.env.VITE_API_URL}api/ip/${user[0].userIP}`
+          `${import.meta.env.VITE_API_URL}api/ip/${userIP}`
         );
         setErrMessage("");
         setCoords(data);
-        const {query} = data
-        const userIP = query?.split(',')[0].trim()  
-
-        setCoords((prev) => prev ? { ...prev, query: userIP } : null)
         
       } catch (error) {
         console.error(error);
