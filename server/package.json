@@ -1,20 +1,19 @@
 {
   "name": "jlabs",
   "version": "1.0.0",
-  "description": "",
+  "description": "Express + JWT API",
+  "author": "Marc Miranda",
   "license": "ISC",
-  "author": "marc miranda",
   "type": "commonjs",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon api/index.ts",
-    "seed": "ts-node seedData.ts",
-    "build": "tsc"
+    "dev": "nodemon src/index.ts",
+    "seed": "ts-node seedData.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.98.0",
-    "@types/bcrypt": "^6.0.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -24,6 +23,7 @@
     "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
