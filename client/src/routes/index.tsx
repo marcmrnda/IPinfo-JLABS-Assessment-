@@ -47,7 +47,7 @@ function RouteComponent() {
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post("api/auth/login", users, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, users, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
