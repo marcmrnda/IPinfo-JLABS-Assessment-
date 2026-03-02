@@ -1,4 +1,4 @@
-# JLabs - IP Geolocation Tracking Dashboard
+# IPinfo - IP Geolocation Tracking Dashboard
 
 A full-stack application for tracking and visualizing IP address geolocation data in real-time. Built with modern web technologies featuring user authentication, interactive maps, and IP history management.
 
