@@ -217,6 +217,8 @@ function RouteComponent() {
       />
     );
 
+    console.log(displayData)
+
   return (
     <>
       <Navbar handleLogout={handleLogout} />
