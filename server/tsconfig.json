@@ -18,6 +18,6 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["lib/**/*.ts","dummyData/*.ts","routes/**/*.ts","src/**/*.ts","controllers/**/*.ts", "seedData.ts","middlewares/**/*"],            /* Include all TS files in lib/ */
+  "include": ["lib/**/*.ts","dummyData/*.ts","routes/**/*.ts","api/**/*.ts","controllers/**/*.ts", "seedData.ts","middlewares/**/*",],            /* Include all TS files in lib/ */
   "exclude": ["node_modules", "dist"]    /* Exclude node_modules and compiled output */
 }
