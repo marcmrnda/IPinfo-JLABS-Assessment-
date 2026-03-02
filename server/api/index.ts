@@ -19,6 +19,4 @@ app.use(cookieParser())
 app.use("/api/auth",userRoute)
 app.use("/api/ip",ipRoute)
 
-app.listen(PORT,() => {
-    console.log(`PORT is Listening on PORT ${PORT}`)
-})
+export default app
