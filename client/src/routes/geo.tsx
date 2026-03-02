@@ -11,31 +11,24 @@ import isIP from "validator/lib/isIP";
 // Interface for IP geolocation data returned from IP-API
 interface IPData {
   ip: string;
-  version: string;
+  type: string;           // "IPv4" or "IPv6"
   city: string;
   region: string;
   region_code: string;
+  country: string;
   country_code: string;
-  country_code_iso3: string;
-  country_name: string;
-  country_capital: string;
-  country_tld: string;
-  continent_code: string;
-  in_eu: boolean;
   postal: string;
   latitude: number;
   longitude: number;
-  timezone: string;
-  utc_offset: string;
-  country_calling_code: string;
-  currency: string;
-  currency_name: string;
-  languages: string;
-  country_area: number;
-  country_population: number;
-  asn: string;
+  timezone: {
+    id: string;           // e.g. "America/Los_Angeles"
+    utc: string;          // e.g. "+05:00"
+  };
+  isp: string;
   org: string;
-  hostname?: string; // optional — not always present
+  asn: string;
+  success: boolean;       // check this for error handling
+  message?: string;       // present if success: false
 }
 
 // Helper component that recenters the map when coordinates change
@@ -89,7 +82,7 @@ function RouteComponent() {
         user_id: user[0].user_id,
       });
 
-      const { data } = await axios.get(`https://ipapi.co/${searchTerm}/json/`);
+      const { data } = await axios.get(`https://ipwho.is/${searchTerm}`);
       setErrMessage("");
       setSearchedCoords(data);
     } catch (error) {
@@ -151,7 +144,7 @@ function RouteComponent() {
     const fetchUserIPGeolocation = async () => {
       try {
         const { data } = await axios.get(
-          `https://ipapi.co/${user[0].userIP}/json/`,
+          `https://ipwho.is/${user[0].userIP}`,
         );
         setErrMessage("");
         setCoords(data);
@@ -208,7 +201,7 @@ function RouteComponent() {
         throw new Error("Wrong IP Format");
       }
 
-      const { data } = await axios.get(`https://ipapi.co/${ip}/json/`);
+      const { data } = await axios.get(`https://ipwho.is/${ip}`);
       setErrMessage("");
       setSearchedCoords(data);
       activeIPRef.current = ip;
@@ -302,7 +295,7 @@ function RouteComponent() {
                 Country
               </p>
               <h1 className="text-lg font-bold text-black mt-1">
-                {displayData?.country_name ?? "N/A"}
+                {displayData?.country ?? "N/A"}
               </h1>
             </div>
 
