@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    /* Environment Settings */
+    "target": "ES2020",                  /* Modern Node.js target */
+    "module": "commonjs",                /* Node-compatible modules */
+    "rootDir": ".",                   /* Source folder for TS files */
+    "outDir": "./dist",                   /* Compiled JS output folder */
+    "strict": true,                       /* Enable all strict type-checking options */
+    "esModuleInterop": true,              /* Enables default import compatibility */
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,                 /* Skip type checking of all declaration files */
+    "types": ["node"],                    /* Include Node.js types for process, fs, etc. */
+    "sourceMap": true,                    /* Generate source maps for debugging */
+    "noUncheckedIndexedAccess": true,     /* Warn if indexing objects could be undefined */
+    "exactOptionalPropertyTypes": true,   /* Optional properties must match exactly */
+    
+    /* Optional: Output Declarations for modules */
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": ["lib/**/*.ts","dummyData/*.ts","routes/**/*.ts","src/**/*.ts","controllers/**/*.ts", "seedData.ts","middlewares/**/*"],            /* Include all TS files in lib/ */
+  "exclude": ["node_modules", "dist"]    /* Exclude node_modules and compiled output */
+}
