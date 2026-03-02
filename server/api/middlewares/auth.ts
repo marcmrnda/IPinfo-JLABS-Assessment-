@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken'
-import {Request,Response,NextFunction} from 'express'
+import { Request, Response, NextFunction } from 'express'
 import 'dotenv/config'
 import { supabase } from '../lib/supabase'
 
+// Extend Express Request type
 declare global {
     namespace Express {
         interface Request {
@@ -11,18 +12,23 @@ declare global {
     }
 }
 
+// JWT secret from environment
 const secretKey = process.env.JWT_SECRET || ''
 
+// Protect middleware
 export const protect = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.cookies.token
+        // Get token from cookies
+        const token = req.cookies?.token
 
         if (!token) {
             return res.status(401).json({ message: "Not authorized, no token" })
         }
 
+        // Verify JWT
         const decoded = jwt.verify(token, secretKey) as jwt.JwtPayload
 
+        // Fetch user from Supabase
         const { data, error } = await supabase
             .from("users")
             .select("user_id,email")
@@ -30,34 +36,34 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
             .single()
 
         if (error || !data) {
-            return res.status(400).json({ message: "Not authorized, no user found!" })
+            return res.status(401).json({ message: "Not authorized, user not found" })
         }
 
-        const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        // Capture user IP
+        const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress
 
-        const userData = [{
+        // Attach user info to request
+        req.user = [{
             ...data,
             userIP: userIp
-           
         }]
 
-        req.user = userData
-        
         next()
-
-    } catch (error) {
-        console.error(error)
-        res.status(402).json({ message: "Not authorized, token failed" })
+    } catch (err) {
+        console.error(err)
+        res.status(401).json({ message: "Not authorized, token invalid or expired" })
     }
 }
 
+// Cookie options for JWT
 export const cookiesOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict' as const,
-    maxAge: 30 * 24 * 60 * 60 * 1000
+    secure: process.env.NODE_ENV === 'production', // Must be true for sameSite: 'none'
+    sameSite: 'none' as const,                      // Allow cross-site cookies
+    maxAge: 30 * 24 * 60 * 60 * 1000               // 30 days
 }
 
+// Function to generate JWT token
 export const generateToken = (id: string) => {
     return jwt.sign({ id }, secretKey, {
         expiresIn: '30d'
