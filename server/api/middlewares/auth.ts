@@ -41,6 +41,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
 
         // Capture user IP
         const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+        
 
         // Attach user info to request
         req.user = [{

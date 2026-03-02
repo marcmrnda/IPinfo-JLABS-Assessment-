@@ -140,6 +140,11 @@ function RouteComponent() {
         );
         setErrMessage("");
         setCoords(data);
+        const {query} = data
+        const userIP = query?.split(',')[0].trim()  
+
+        setCoords((prev) => prev ? { ...prev, query: userIP } : null)
+        
       } catch (error) {
         console.error(error);
       } finally {
