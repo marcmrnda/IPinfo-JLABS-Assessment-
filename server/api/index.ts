@@ -18,5 +18,6 @@ app.use(cookieParser())
 
 app.use("/api/auth",userRoute)
 app.use("/api/ip",ipRoute)
+app.get("/test", (_, res) => res.send("OK"));
 
 export default app
