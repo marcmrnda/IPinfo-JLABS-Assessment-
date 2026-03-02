@@ -21,7 +21,7 @@ A full-stack application for tracking and visualizing IP address geolocation dat
 
 ## 🎯 Project Overview
 
-JLabs is a comprehensive IP geolocation tracking system that allows users to:
+IPinfo is a comprehensive IP geolocation tracking system that allows users to:
 
 - **Authenticate** with email and password
 - **Search** for any IP address's geolocation information
