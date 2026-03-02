@@ -54,3 +54,10 @@ export const deleteIPdata = async (req: Request, res: Response) => {
          return res.status(500).json({message: "Internal Server Error"})
     }
 }
+
+export const getGeo = async (req: Request, res: Response) => {
+    const { ip } = req.params;
+  const response = await fetch(`http://ip-api.com/json/${ip}`);
+  const data = await response.json();
+  res.json(data);
+}
