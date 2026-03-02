@@ -40,7 +40,7 @@ function App() {
   const fetchUser = async () => {
     try {
       // Request authenticated user data from server
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}api/auth/me`, {
         withCredentials: true
       })
       setUser(res.data)

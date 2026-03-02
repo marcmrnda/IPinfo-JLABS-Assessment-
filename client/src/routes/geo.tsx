@@ -72,7 +72,7 @@ function RouteComponent() {
         throw new Error("Wrong IP Format");
       }
 
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/ip/saveIP`, {
+      await axios.post(`${import.meta.env.VITE_API_URL}api/ip/saveIP`, {
         ip: searchTerm,
         user_id: user[0].user_id,
       });
@@ -88,7 +88,7 @@ function RouteComponent() {
   // Retrieves user's IP history from the database
   const fetchIPAdds = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/ip/getIP`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/ip/getIP`, {
         params: {
           user_id: user[0].user_id,
         },
@@ -112,7 +112,7 @@ function RouteComponent() {
   // Deletes selected IPs from database and local state
   const handleDelete = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/ip/deleteIP`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}api/ip/deleteIP`, {
         data: { ips: [...selectedIPs] },
       });
       setIPAdds(getIPAdds.filter((item: any) => !selectedIPs.has(item.id)));
@@ -157,7 +157,7 @@ function RouteComponent() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/logout`,
+        `${import.meta.env.VITE_API_URL}api/auth/logout`,
         {},
         { withCredentials: true },
       );
