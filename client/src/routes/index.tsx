@@ -1,5 +1,5 @@
 // Main login page component - handles user authentication
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter, useNavigate } from '@tanstack/react-router';
 import { useState } from "react";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import axios, { AxiosError } from "axios";
@@ -23,6 +23,11 @@ export const Route = createFileRoute("/")({
 
 // Login page component
 function RouteComponent() {
+  
+  const router = useRouter()
+  const navigate = useNavigate()
+  const { refetchUser } = Route.useRouteContext()
+
   // State to toggle password visibility (eye icon)
   const [typePassword, setTypePassword] = useState<boolean>(false);
   // State for storing user input (email and password)
@@ -38,20 +43,20 @@ function RouteComponent() {
     setTypePassword((prev) => !prev);
   };
 
-  // Submits login credentials to server and navigates to geo page on success
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // Send login request with credentials
       await axios.post("api/auth/login", users, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
 
-      // Redirect to geolocation page on successful login
-      navigation.navigate("/geo")
+      await refetchUser();        // ✅ updates user state in main.tsx
+      await router.invalidate();  // ✅ re-runs beforeLoad with fresh user
+      await navigate({ to: '/geo' });
+
     } catch (err) {
-      // Handle login errors and display error message to user
       const axiosErr = err as AxiosError<{ message: string }>;
       if (axiosErr.response) {
         setErrM(axiosErr.response.data.message);

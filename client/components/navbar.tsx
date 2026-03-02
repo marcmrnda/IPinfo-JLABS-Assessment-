@@ -1,4 +1,3 @@
-import type { MouseEventHandler } from "react";
 import { IoMdPin } from "react-icons/io";
 
 interface NavbarProps {
