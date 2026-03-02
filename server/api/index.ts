@@ -1,10 +1,10 @@
 import express from 'express'
 import 'dotenv/config';
-import { userRoute } from '../routes/user.routes';
+import { userRoute } from './routes/user.routes';
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import 'dotenv/config'
-import { ipRoute } from '../routes/ip.routes';
+import { ipRoute } from './routes/ip.routes';
 
 const app = express()
 const PORT = process.env.PORT || 8000
