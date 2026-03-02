@@ -10,20 +10,32 @@ import isIP from "validator/lib/isIP";
 
 // Interface for IP geolocation data returned from IP-API
 interface IPData {
-  query: string;
-  status: string;
-  country: string;
-  countryCode: string;
-  region: string;
-  regionName: string;
+  ip: string;
+  version: string;
   city: string;
-  zip: string;
-  lat: number;
-  lon: number;
+  region: string;
+  region_code: string;
+  country_code: string;
+  country_code_iso3: string;
+  country_name: string;
+  country_capital: string;
+  country_tld: string;
+  continent_code: string;
+  in_eu: boolean;
+  postal: string;
+  latitude: number;
+  longitude: number;
   timezone: string;
-  isp: string;
+  utc_offset: string;
+  country_calling_code: string;
+  currency: string;
+  currency_name: string;
+  languages: string;
+  country_area: number;
+  country_population: number;
+  asn: string;
   org: string;
-  as: string;
+  hostname?: string; // optional — not always present
 }
 
 // Helper component that recenters the map when coordinates change
@@ -77,7 +89,7 @@ function RouteComponent() {
         user_id: user[0].user_id,
       });
 
-      const { data } = await axios.get(`http://ip-api.com/json/${searchTerm}`);
+      const { data } = await axios.get(`https://ipapi.co/${searchTerm}/json/`);
       setErrMessage("");
       setSearchedCoords(data);
     } catch (error) {
@@ -139,7 +151,7 @@ function RouteComponent() {
     const fetchUserIPGeolocation = async () => {
       try {
         const { data } = await axios.get(
-          `http://ip-api.com/json/${user[0].userIP}`,
+          `https://ipapi.co/${user[0].userIP}/json/`,
         );
         setErrMessage("");
         setCoords(data);
@@ -196,7 +208,7 @@ function RouteComponent() {
         throw new Error("Wrong IP Format");
       }
 
-      const { data } = await axios.get(`http://ip-api.com/json/${ip}`);
+      const { data } = await axios.get(`https://ipapi.co/${ip}/json/`);
       setErrMessage("");
       setSearchedCoords(data);
       activeIPRef.current = ip;
@@ -207,8 +219,8 @@ function RouteComponent() {
 
   // Determines which coordinates to display - searched IP takes precedence
   const displayData = searchedCoords ?? coords;
-  const lat = displayData?.lat ?? 0;
-  const lon = displayData?.lon ?? 0;
+  const lat = displayData?.latitude ?? 0;
+  const lon = displayData?.longitude ?? 0;
   const position = new LatLng(lat, lon);
 
   // Loading spinner displayed while fetching initial user IP data
@@ -267,7 +279,7 @@ function RouteComponent() {
                 IP Address
               </p>
               <h1 className="text-lg font-bold text-black mt-1 break-all">
-                {displayData?.query ?? "0.0.0.0"}
+                {displayData?.ip ?? "0.0.0.0"}
               </h1>
             </div>
 
@@ -290,7 +302,7 @@ function RouteComponent() {
                 Country
               </p>
               <h1 className="text-lg font-bold text-black mt-1">
-                {displayData?.country ?? "N/A"}
+                {displayData?.country_name ?? "N/A"}
               </h1>
             </div>
 
@@ -308,7 +320,7 @@ function RouteComponent() {
                 Zip Code
               </p>
               <h1 className="text-lg font-bold text-black mt-1">
-                {displayData?.zip ?? "N/A"}
+                {displayData?.postal ?? "N/A"}
               </h1>
             </div>
           </div>
