@@ -11,26 +11,26 @@ import isIP from "validator/lib/isIP";
 // Interface for IP geolocation data returned from IP-API
 interface IPData {
   ip: string;
-  type: string;           // "IPv4" or "IPv6"
-  city: string;
-  region: string;
-  region_code: string;
-  country: string;
-  country_code: string;
-  postal: string;
-  latitude: number;
-  longitude: number;
-  timezone: {
-    id: string;           // e.g. "America/Los_Angeles"
-    utc: string;          // e.g. "+05:00"
+  type: string;           // "ipv4" or "ipv6"
+  network: {
+    cidr: string;
+    autonomous_system: {
+      asn: number;
+      name: string;
+      organization: string;
+    };
   };
-  isp: string;
-  org: string;
-  asn: string;
-  success: boolean;       // check this for error handling
-  message?: string;       // present if success: false
+  location: {
+    continent: string;
+    country: string;       // "United States"
+    country_code: string;  // "US"
+    city: string;
+    postal_code: string;
+    latitude: number;
+    longitude: number;
+    timezone: string;      // "America/Los_Angeles"
+  };
 }
-
 // Helper component that recenters the map when coordinates change
 function RecenterMap({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
@@ -82,7 +82,7 @@ function RouteComponent() {
         user_id: user[0].user_id,
       });
 
-      const { data } = await axios.get(`https://ipwho.is/${searchTerm}`);
+      const { data } = await axios.get(`https://ip.guide/${searchTerm}`);
       setErrMessage("");
       setSearchedCoords(data);
     } catch (error) {
@@ -144,7 +144,7 @@ function RouteComponent() {
     const fetchUserIPGeolocation = async () => {
       try {
         const { data } = await axios.get(
-          `https://ipwho.is/${user[0].userIP}`,
+          `https://ip.guide/${user[0].userIP}`,
         );
         setErrMessage("");
         setCoords(data);
@@ -201,7 +201,7 @@ function RouteComponent() {
         throw new Error("Wrong IP Format");
       }
 
-      const { data } = await axios.get(`https://ipwho.is/${ip}`);
+      const { data } = await axios.get(`https://ip.guide/${ip}`);
       setErrMessage("");
       setSearchedCoords(data);
       activeIPRef.current = ip;
@@ -212,8 +212,8 @@ function RouteComponent() {
 
   // Determines which coordinates to display - searched IP takes precedence
   const displayData = searchedCoords ?? coords;
-  const lat = displayData?.latitude ?? 0;
-  const lon = displayData?.longitude ?? 0;
+  const lat = displayData?.location.latitude ?? 0;
+  const lon = displayData?.location.longitude ?? 0;
   const position = new LatLng(lat, lon);
 
   // Loading spinner displayed while fetching initial user IP data
@@ -295,7 +295,7 @@ function RouteComponent() {
                 Country
               </p>
               <h1 className="text-lg font-bold text-black mt-1">
-                {displayData?.country ?? "N/A"}
+                {displayData?.location.country ?? "N/A"}
               </h1>
             </div>
 
@@ -304,7 +304,7 @@ function RouteComponent() {
                 City
               </p>
               <h1 className="text-lg font-bold text-black mt-1">
-                {displayData?.city ?? "N/A"}
+                {displayData?.location.city ?? "N/A"}
               </h1>
             </div>
 
@@ -313,7 +313,7 @@ function RouteComponent() {
                 Zip Code
               </p>
               <h1 className="text-lg font-bold text-black mt-1">
-                {displayData?.postal ?? "N/A"}
+                {displayData?.location.postal_code ?? "N/A"}
               </h1>
             </div>
           </div>
